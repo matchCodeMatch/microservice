@@ -9,5 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
+    public List<Employee> findByDesignationId(String designationId);
 
 }

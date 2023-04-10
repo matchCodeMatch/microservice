@@ -31,10 +31,10 @@ public class EmployeeProjectMappingService implements Services<EmployeeProjectMa
     private EmployeeRepository employeeRepository;
 
     @Override
-    public List<EmployeeProjectMappingDTO> getAllEntity() {
+    public List<EmployeeProjectMappingDTO> getAllEntity(int offset, int limit) {
         ArrayList<EmployeeProjectMappingDTO> list = new ArrayList<>();
         employeeProjectMappingDAO
-                .getAllEntity()
+                .getAllEntity(offset, limit)
                 .forEach(
                         employeeProjectMappingDAO->list
                                 .add(convertEmpProjectToEmpProjectDTO(
@@ -45,9 +45,10 @@ public class EmployeeProjectMappingService implements Services<EmployeeProjectMa
 
     }
     public EmployeeProjectMappingDTO addEntity(EmployeeProjectMapping employeeProjectMapping){
-        if((employeeDAO.getById(employeeProjectMapping.getEmpId()) != null) &&
-            (projectServiceClient.getByProjectId(employeeProjectMapping.getProjectId())) != null)
-                return convertEmpProjectToEmpProjectDTO(employeeProjectMappingDAO.addEntity(employeeProjectMapping));
+        if((employeeDAO.getById(employeeProjectMapping.getEmployeeId()) != null) &&
+            (projectServiceClient.getByProjectId(employeeProjectMapping.getProjectId())) != null){
+                employeeProjectMapping.setEmployeeProjectMappingId(String.valueOf(UUID.randomUUID()));
+                return convertEmpProjectToEmpProjectDTO(employeeProjectMappingDAO.addEntity(employeeProjectMapping));}
         else
             throw new EntityMappedException();
     }
@@ -57,27 +58,53 @@ public class EmployeeProjectMappingService implements Services<EmployeeProjectMa
         UUID.fromString(id);
         return convertEmpProjectToEmpProjectDTO(employeeProjectMappingDAO.getById(id));
     }
-
-    @Override
-    public void deleteAllEntity() {
-        employeeProjectMappingDAO.deleteAllEntity();
+    public Map<String,String> getAllEmployeeByProjectId(String projectId){
+        UUID.fromString(projectId);
+        Map<String,String> employeeMap = new HashMap<>();
+        employeeProjectMappingDAO.getAllByProjectId(projectId).forEach(employeeProjectMapping -> {
+            employeeMap.put(employeeProjectMapping.getEmployeeId(),
+                    employeeDAO.getById(employeeProjectMapping
+                                    .getEmployeeId())
+                            .getFirstName());
+        });
+        return employeeMap;
     }
+    public Map<String,String> getAllProjectByEmployeeId(String employeeId){
+        UUID.fromString(employeeId);
+        Map<String,String> projectMap = new HashMap<>();
+        employeeProjectMappingDAO.getAllByEmployeeId(employeeId).forEach(employeeProjectMapping -> {
+            ProjectDTO project = projectServiceClient.getByProjectId(employeeProjectMapping.getProjectId()).getBody();
+            projectMap.put(project.getProjectId(), project.getProjectTitle());
+        });
+        return projectMap;
+    }
+
+//    @Override
+//    public void deleteAllEntity() {
+//        employeeProjectMappingDAO.deleteAllEntity();
+//    }
 
     @Override
     public void deleteById(String id) {
-        boolean flag = true;
-        List<ProjectDTO> projectDTOList;
-        projectDTOList = projectServiceClient.getAllProjects().getBody();
-        for(ProjectDTO projectDTO : projectDTOList){
-            if(projectDTO.getProjectId() == employeeProjectMappingDAO.getById(id).getProjectId()){
-                flag = false;
-                break;
-            }
-        }
-        if(!flag && employeeDAO.getById(employeeProjectMappingDAO.getById(id).getEmpId()) != null)
-            throw new EntityMappedException();
+        UUID.fromString(id);
         employeeProjectMappingDAO.deleteById(id);
     }
+
+    //    @Override
+//    public void deleteById(String id) {
+//        boolean flag = true;
+//        List<ProjectDTO> projectDTOList;
+//        projectDTOList = projectServiceClient.getAllProjects().getBody();
+//        for(ProjectDTO projectDTO : projectDTOList){
+//            if(projectDTO.getProjectId() == employeeProjectMappingDAO.getById(id).getProjectId()){
+//                flag = false;
+//                break;
+//            }
+//        }
+//        if(!flag && employeeDAO.getById(employeeProjectMappingDAO.getById(id).getEmployeeId()) != null)
+//            throw new EntityMappedException();
+//        employeeProjectMappingDAO.deleteById(id);
+//    }
     public EmployeeProjectMappingDTO convertEmpProjectToEmpProjectDTO(EmployeeProjectMapping employeeProjectMapping){
         EmployeeProjectMappingDTO employeeProjectMappingDTO = new EmployeeProjectMappingDTO();
         employeeProjectMappingDTO.setEmployeeProjectMappingId(employeeProjectMapping
@@ -88,7 +115,7 @@ public class EmployeeProjectMappingService implements Services<EmployeeProjectMa
                         .getBody().getProjectTitle()
         );
         employeeProjectMappingDTO.setEmpName(employeeDAO
-                .getById(employeeProjectMapping.getEmpId()).getFirstName()
+                .getById(employeeProjectMapping.getEmployeeId()).getFirstName()
         );
         return employeeProjectMappingDTO;
     }

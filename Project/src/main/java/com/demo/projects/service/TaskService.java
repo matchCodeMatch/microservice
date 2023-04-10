@@ -35,8 +35,8 @@ public class TaskService implements Services<TaskDTO> {
     }
 
     @Override
-    public List<TaskDTO> getAllEntity() {
-        return convertTaskListToTaskDTOList(taskDAO.getAllEntity());
+    public List<TaskDTO> getAllEntity(int offset,int limit) {
+        return convertTaskListToTaskDTOList(taskDAO.getAllEntity(offset,limit));
     }
 
     @Override
@@ -50,6 +50,9 @@ public class TaskService implements Services<TaskDTO> {
             task.setTaskId(String.valueOf(UUID.randomUUID()));
             return convertTaskToTaskDTO(taskDAO.addEntity(task));
 
+    }
+    public List<TaskDTO> getAllTaskByProjectId(String id){
+        return convertTaskListToTaskDTOList(taskDAO.getAllByProjectId(id));
     }
     public TaskDTO updateTask (Task task, String id){
         UUID.fromString(id);
@@ -83,5 +86,13 @@ public class TaskService implements Services<TaskDTO> {
     @Override
     public void deleteById(String id) {
         taskDAO.deleteById(id);
+    }
+
+    public List<TaskDTO> getAllTaskByEmployeeId(String id) {
+        return convertTaskListToTaskDTOList(taskDAO.getAllByEmployeeId(id));
+    }
+
+    public void addAll(List<Task> tasks) {
+        tasks.forEach(this::addEntity);
     }
 }

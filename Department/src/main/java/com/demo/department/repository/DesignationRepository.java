@@ -23,13 +23,11 @@ public interface DesignationRepository extends JpaRepository<Designation, String
             nativeQuery = true)
     List<String> findDesignation( @Param("deptName") Long deptName);
     @Query(
-            value = """
-                    SELECT designation_id
-                    FROM designation
-                    WHERE department_id = :department_id
-                    LIMIT 1;""",
+            value = "SELECT designation_id FROM designation WHERE department_id = :department_id LIMIT 1;",
             nativeQuery = true
     )
     public Optional<String> existByDepartmentID(@Param("department_id") String departmentId);
+
+    public List<Designation> findByDepartmentId(String departmentId);
 
 }

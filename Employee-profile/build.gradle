@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.8'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "org.sonarqube" version "3.5.0.2730"
+	id "jacoco"
 }
 
 group = 'com.department'
@@ -14,11 +16,36 @@ configurations {
 	}
 }
 
+jacoco {
+	toolVersion = "0.8.7"
+}
+
+test {
+	jacoco {
+		// enable coverage for tests
+		enabled = true
+	}
+}
+
+test.finalizedBy jacocoTestReport
+
 repositories {
 	mavenCentral()
 }
 ext {
 	set('springCloudVersion', "2021.0.5")
+}
+sonarqube {
+	properties {
+		property "sonar.host.url", "http://localhost:9000"
+		property "sonar.projectKey", "Employee-profile"
+		property "sonar.projectName", "Employee-profile"
+		property "sonar.projectVersion", "1.0"
+		property "sonar.sources", "src/main/java"
+		property "sonar.tests", "src/test/java"
+		property "sonar.java.coveragePlugin", "jacoco"
+		property "sonar.junit.reportPaths", "build/test-results/test"
+	}
 }
 
 dependencies {
@@ -32,6 +59,14 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.7.8'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk-secretsmanager', version: '1.12.418'
+	implementation group: 'commons-validator', name: 'commons-validator', version: '1.6'
+//	testImplementation group: 'org.mockito', name: 'mockito-core', version: '1.9.5'
+	testImplementation group: 'junit', name: 'junit', version: '4.12'
+	implementation group: 'org.jacoco', name: 'jacoco-maven-plugin', version: '0.7.9'
+
+
+
 }
 dependencyManagement {
 	imports {

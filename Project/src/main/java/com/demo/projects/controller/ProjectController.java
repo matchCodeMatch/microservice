@@ -19,8 +19,8 @@ public class ProjectController  {
     private ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
-        return new ResponseEntity<>(projectService.getAllEntity(), HttpStatus.OK);
+    public ResponseEntity<List<ProjectDTO>> getAllProjects(@RequestHeader int offset,@RequestHeader int limit) {
+        return new ResponseEntity<>(projectService.getAllEntity(offset,limit), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -41,14 +41,20 @@ public class ProjectController  {
     public ResponseEntity<ProjectDTO> updateProject(@RequestBody Project project,@PathVariable String id){
         return new ResponseEntity<>(projectService.updateProject(project,id),HttpStatus.OK);
     }
-    @DeleteMapping
-    public void deleteAllEntity() {
-        projectService.deleteAllEntity();
-    }
+//    @DeleteMapping
+//    public void deleteAllEntity() {
+//        projectService.deleteAllEntity();
+//    }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable String id) {
+    public ResponseEntity<HttpStatus> deleteById(@PathVariable String id) {
         projectService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/all")
+    public void addAlLProjects(@RequestBody List<Project> projects){
+        projectService.addAll(projects);
     }
 }
 

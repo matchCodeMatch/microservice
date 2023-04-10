@@ -3,6 +3,7 @@ package com.demo.projects.dao;
 import com.demo.projects.repository.TaskRepository;
 import com.demo.projects.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,8 +15,8 @@ public class TaskDAO implements DAOInterface<Task> {
     private TaskRepository taskRepository;
 
     @Override
-    public List<Task> getAllEntity() {
-        return taskRepository.findAll();
+    public List<Task> getAllEntity(int offset,int limit) {
+        return taskRepository.findAll(PageRequest.of(offset, limit)).stream().toList();
     }
 
     @Override
@@ -42,5 +43,11 @@ public class TaskDAO implements DAOInterface<Task> {
 //    }
     public Optional<String> checkProjectId(String id){
         return taskRepository.existByProjectID(id);
+    }
+    public List<Task> getAllByProjectId(String id){
+        return taskRepository.findByProjectId(id);
+    }
+    public List<Task> getAllByEmployeeId(String id){
+        return taskRepository.findByEmployeeId(id);
     }
 }

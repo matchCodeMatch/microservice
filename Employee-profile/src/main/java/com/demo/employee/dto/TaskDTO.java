@@ -1,10 +1,14 @@
 package com.demo.employee.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TaskDTO {
-    private enum Status{
+    public enum Status{
         NOT_STARTED, IN_PROGRESS, COMPLETED, CANCELLED
     }
     private String taskId;

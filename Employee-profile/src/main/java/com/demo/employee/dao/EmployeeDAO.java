@@ -3,10 +3,10 @@ package com.demo.employee.dao;
 import com.demo.employee.Model.Employee;
 import com.demo.employee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.UUID;
 
 @Component
 public class EmployeeDAO implements DAOInterface<Employee>{
@@ -15,8 +15,8 @@ public class EmployeeDAO implements DAOInterface<Employee>{
 
 
     @Override
-    public List<Employee> getAllEntity() {
-        return employeeRepository.findAll();
+    public List<Employee> getAllEntity(int offset,int limit) {
+        return employeeRepository.findAll(PageRequest.of(offset, limit)).stream().toList();
     }
 
     @Override
@@ -36,5 +36,9 @@ public class EmployeeDAO implements DAOInterface<Employee>{
     @Override
     public void deleteById(String id) {
         employeeRepository.deleteById(id);
+    }
+
+    public List<Employee> getAllByDesignationId(String designationId){
+        return employeeRepository.findByDesignationId(designationId);
     }
 }

@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmployeeDTO {
     public enum Gender{
         MALE, FEMALE

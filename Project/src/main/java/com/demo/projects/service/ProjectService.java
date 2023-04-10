@@ -21,8 +21,8 @@ public class ProjectService implements Services<ProjectDTO> {
     private TaskDAO taskDAO;
 
     @Override
-    public List<ProjectDTO> getAllEntity() {
-        return convertProjectListToProjectDTOList(projectDAO.getAllEntity());
+    public List<ProjectDTO> getAllEntity(int offset, int limit) {
+        return convertProjectListToProjectDTOList(projectDAO.getAllEntity(offset,limit));
     }
 
     @Override
@@ -81,5 +81,9 @@ public class ProjectService implements Services<ProjectDTO> {
         projectDTO.setProjectEndDate(project.getProjectEndDate());
         projectDTO.setProjectDeadLine(project.getProjectDeadLine());
         return projectDTO;
+    }
+
+    public void addAll(List<Project> projects) {
+        projects.forEach(this::addEntity);
     }
 }

@@ -19,8 +19,8 @@ public class DesignationController {
 
 
     @GetMapping
-    public ResponseEntity<List<DesignationDTO>> allDesignation(){
-        return new ResponseEntity<>(designationService.getAllEntity(), HttpStatus.OK);
+    public ResponseEntity<List<DesignationDTO>> allDesignation(@RequestHeader int offset,@RequestHeader int limit){
+        return new ResponseEntity<>(designationService.getAllEntity(offset, limit), HttpStatus.OK);
     }
 
     @PostMapping
@@ -31,15 +31,20 @@ public class DesignationController {
     public ResponseEntity<DesignationDTO> getDesignationById (@PathVariable String id){
         return new ResponseEntity<>(designationService.getById(id),HttpStatus.OK);
     }
+    @GetMapping("/departments/{departmentId}")
+    public ResponseEntity<List<DesignationDTO>> getDesignationByDepartmentId (@PathVariable String departmentId){
+        return new ResponseEntity<>(designationService.getAllDesignationByDepartmentId(departmentId),HttpStatus.OK);
+    }
     @PutMapping("/{id}")
     public ResponseEntity<DesignationDTO> updateDesignation(@RequestBody Designation designation, @PathVariable String id){
         return new ResponseEntity<>(designationService.updateDesignation(designation,id),HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteDepartmentById(@PathVariable String id){
+    public ResponseEntity<HttpStatus> deleteDepartmentById(@PathVariable String id){
         designationService.deleteById(id);
         return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 //    Admin
 //    @DeleteMapping()
 //    public ResponseEntity deleteAllDepartment(){

@@ -12,7 +12,7 @@ import java.util.UUID;
 public class EmployeeProjectMapping {
     @Id
     private String employeeProjectMappingId;
-    private String empId;
+    private String employeeId;
     private String projectId;
 
 }

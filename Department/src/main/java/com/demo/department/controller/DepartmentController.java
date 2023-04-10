@@ -2,6 +2,7 @@ package com.demo.department.controller;
 
 import com.demo.department.dto.DepartmentDTO;
 import com.demo.department.model.Department;
+import com.demo.department.model.Designation;
 import com.demo.department.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,8 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @GetMapping
-    public ResponseEntity<List<DepartmentDTO>> allDepartment(){
-        return new ResponseEntity<>(departmentService.getAllEntity(), HttpStatus.OK);
+    public ResponseEntity<List<DepartmentDTO>> allDepartment(@RequestHeader int offset,@RequestHeader int limit){
+        return new ResponseEntity<>(departmentService.getAllEntity(offset, limit), HttpStatus.OK);
     }
 
     @PostMapping
@@ -36,10 +37,14 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteDepartmentById(@PathVariable String id){
+    public ResponseEntity<HttpStatus> deleteDepartmentById(@PathVariable String id){
         departmentService.deleteById(id);
         return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+//    @PostMapping("/all")
+//    public void add(@RequestBody List<Designation> dep){
+//        departmentService.addAll(dep);
+//    }
 //    Admin
 //    @DeleteMapping()
 //    public ResponseEntity deleteAllDepartment(){

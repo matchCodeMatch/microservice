@@ -25,8 +25,8 @@ public class DesignationService implements Services<DesignationDTO> {
     @Autowired
     private EmployeeServiceClient employeeServiceClient;
     @Override
-    public List<DesignationDTO> getAllEntity() {
-        return converDesignationListToDesignationDTOList(designationDAO.getAllEntity());
+    public List<DesignationDTO> getAllEntity(int offset, int limit) {
+        return converDesignationListToDesignationDTOList(designationDAO.getAllEntity(offset, limit));
     }
 
     @Override
@@ -56,6 +56,10 @@ public class DesignationService implements Services<DesignationDTO> {
         oldDesignation.setDepartmentId(designation.getDepartmentId());
         oldDesignation.setDesignationName(designation.getDesignationName());
         return convertDesignationToDesignationDTO(designationDAO.addEntity(oldDesignation));
+    }
+    public List<DesignationDTO> getAllDesignationByDepartmentId (String id){
+        UUID.fromString(id);
+        return converDesignationListToDesignationDTOList(designationDAO.getAllByDepartmentId(id));
     }
     @Override
     public void deleteAllEntity() {
@@ -87,9 +91,14 @@ public class DesignationService implements Services<DesignationDTO> {
     }
     public DesignationDTO convertDesignationToDesignationDTO (Designation designation){
         DesignationDTO designationDTO = new DesignationDTO();
-        designationDTO.setDesignationId(designation.getDesignationId());
-        designationDTO.setDesignationName(designation.getDesignationName());
-        designationDTO.setDepartmentName(departmentDAO.getById(designation.getDepartmentId()).getDepartmentName());
+//        try {
+            designationDTO.setDesignationId(designation.getDesignationId());
+            designationDTO.setDesignationName(designation.getDesignationName());
+            designationDTO.setDepartmentName(departmentDAO.getById(designation.getDepartmentId()).getDepartmentName());
+//        }
+//        catch(Exception ex){
+//            System.out.println(designation.getDepartmentId());
+//        }
         return designationDTO;
     }
 }

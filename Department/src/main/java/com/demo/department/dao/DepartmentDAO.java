@@ -3,6 +3,7 @@ package com.demo.department.dao;
 import com.demo.department.model.Department;
 import com.demo.department.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,8 +14,8 @@ public class DepartmentDAO implements DAOInterface<Department>{
     @Autowired
     private DepartmentRepository departmentRepository;
     @Override
-    public List<Department> getAllEntity() {
-        return departmentRepository.findAll();
+    public List<Department> getAllEntity(int offset, int limit) {
+        return departmentRepository.findAll(PageRequest.of(offset, limit)).stream().toList();
     }
 
     @Override

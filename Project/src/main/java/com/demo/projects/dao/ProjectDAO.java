@@ -3,6 +3,7 @@ package com.demo.projects.dao;
 import com.demo.projects.entity.Project;
 import com.demo.projects.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,8 +15,8 @@ public class ProjectDAO implements DAOInterface<Project> {
     private ProjectRepository projectRepository;
 
     @Override
-    public List<Project> getAllEntity() {
-        return projectRepository.findAll();
+    public List<Project> getAllEntity(int offset,int limit) {
+        return projectRepository.findAll(PageRequest.of(offset, limit)).stream().toList();
     }
 
     @Override

@@ -47,7 +47,6 @@ public class EmployeeExceptionHandler {
         return ex.getOriginalMessage();
     }
 
-
     @org.springframework.web.bind.annotation.ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleIllegalArgumentException(IllegalArgumentException ex) {
@@ -56,7 +55,8 @@ public class EmployeeExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(NullPointerException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleNullPointerException(NullPointerException ex) {
-        return "Fields should not be null or incorrect field data.";
+//        return "Fields should not be null or incorrect field data.";
+        return ex.getMessage();
     }
     @org.springframework.web.bind.annotation.ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -70,7 +70,7 @@ public class EmployeeExceptionHandler {
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleJsonMappingException(Exception ex) {
-        return "There was no profile for the given id.";
+        return "There was no profile for the given id."+ ex.getLocalizedMessage()+ex.getClass();
     }
     @org.springframework.web.bind.annotation.ExceptionHandler(EntityMappedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -81,8 +81,15 @@ public class EmployeeExceptionHandler {
     @ExceptionHandler(FeignException.BadRequest.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleFeignHandlerException(FeignException.BadRequest ex){
-        return "Feign Client Bad Request Error.";
+        return "Feign Client Bad Request Error."+ex.getLocalizedMessage();
+//        Map map = new HashMap<>();
+//        map.put("Message",ex.getMessage());
+//        map.put("Request",ex.request());
+//        map.put("Body",ex.responseBody());
+//        map.put("Headers",ex.responseHeaders());
+//        return map;
     }
+
     @ExceptionHandler(FeignException.NotFound.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleFeignExceptionNotFound(FeignException.NotFound ex){

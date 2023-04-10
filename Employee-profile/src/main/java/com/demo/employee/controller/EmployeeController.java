@@ -28,8 +28,8 @@ public class EmployeeController {
 
     //----------------------------------Showing All Employee details.-------------------------------
     @GetMapping
-    public ResponseEntity<List<EmployeeDTO>> getAllEmployee(){
-        return new ResponseEntity<>(employeeService.getAllEntity(), HttpStatus.OK);
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployee(@RequestHeader int offset,@RequestHeader int limit){
+        return new ResponseEntity<>(employeeService.getAllEntity(offset,limit), HttpStatus.OK);
     }
     //----------------------------------Showing the employee with ID--------------------------------
     @GetMapping("/{id}")
@@ -40,6 +40,10 @@ public class EmployeeController {
 //    public ResponseEntity<List<EmployeeDTO>> getAllEmployeeByIds(@RequestBody List<String> idList){
 //        return new ResponseEntity<>(employeeService.getAllEntityForId(idList),HttpStatus.OK);
 //    }
+    @GetMapping("/designations/{id}")
+    public ResponseEntity<List<EmployeeDTO>> getEmployeeByDesignationId(@PathVariable String id){
+        return new ResponseEntity<>(employeeService.getByDesignationId(id),HttpStatus.OK);
+    }
 
     //------------------------------------To add an employee-----------------------------------
     @PostMapping

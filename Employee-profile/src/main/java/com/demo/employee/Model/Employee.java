@@ -6,6 +6,8 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Employee {
     public enum Gender{
         MALE, FEMALE

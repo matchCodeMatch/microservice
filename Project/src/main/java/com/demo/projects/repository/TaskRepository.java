@@ -25,4 +25,8 @@ public interface TaskRepository extends JpaRepository<Task,String> {
             nativeQuery = true
     )
     public Optional<String> existByProjectID(@Param("project_id") String projectID);
+
+    public List<Task> findByProjectId(String projectId);
+    public List<Task> findByEmployeeId(String employeeId);
+
 }

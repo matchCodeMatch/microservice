@@ -5,6 +5,7 @@ import com.demo.department.dao.DepartmentDAO;
 import com.demo.department.dao.DesignationDAO;
 import com.demo.department.dto.DepartmentDTO;
 import com.demo.department.model.Department;
+import com.demo.department.model.Designation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentService implements Services<DepartmentDTO>{
@@ -23,19 +25,21 @@ public class DepartmentService implements Services<DepartmentDTO>{
     private DesignationDAO designationDAO;
 
     @Override
-    public List<DepartmentDTO> getAllEntity() {
-        return converDepartmentListToDepartmentDTOList(departmentDAO.getAllEntity());
+    public List<DepartmentDTO> getAllEntity(int offset, int limit) {
+//        departmentDAO.getAllEntity().stream().map(DepartmentDTO).collect(Collectors.toList());
+        return converDepartmentListToDepartmentDTOList(departmentDAO.getAllEntity(offset, limit));
     }
 
     @Override
     public DepartmentDTO getById(String id) {
          UUID.fromString(id);
+//         return departmentDAO.getById(id)
          return convertDepartmentToDepartmentDTO(departmentDAO.getById(id));
     }
 
     public DepartmentDTO addEntity(Department department) {
         department.setDepartmentName(department.getDepartmentName().trim());
-        if(department.getDepartmentName() == null ||  department.getDepartmentName().length() < 3)
+        if(department.getDepartmentName() == null ||  department.getDepartmentName().length() < 2)
             throw new NullPointerException();
         department.setDepartmentId(String.valueOf(UUID.randomUUID()));
         return convertDepartmentToDepartmentDTO(departmentDAO.addEntity(department));
@@ -74,4 +78,9 @@ public class DepartmentService implements Services<DepartmentDTO>{
         departmentDTO.setDepartmentName(department.getDepartmentName());
         return departmentDTO;
     }
+//    @Autowired
+//    DesignationService designationService;
+//    public void addAll(List<Designation> dep) {
+//        dep.forEach(department -> designationService.addEntity(department));
+//    }
 }

@@ -32,6 +32,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk-secretsmanager', version: '1.12.418'
+	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+
+
+
 
 
 }

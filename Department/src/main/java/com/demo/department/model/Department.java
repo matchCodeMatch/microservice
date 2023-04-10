@@ -1,6 +1,7 @@
 package com.demo.department.model;
 
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -10,6 +11,7 @@ import java.util.UUID;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Department {
     @Id
     private String departmentId;

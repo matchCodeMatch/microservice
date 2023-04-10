@@ -7,11 +7,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface Services<T> {
-    public List<T> getAllEntity();
+    public List<T> getAllEntity(int offset, int limit);
 //    public T addEntity(T t);
     public T getById(String id);
 //    public T updateEntity(long id, T t);
-    public void deleteAllEntity();
     public void deleteById(String id);
 }
 

@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "DEPARTMENT-MICROSERVICE",configuration = ServiceClientConfiguration.class)
 public interface DepartmentServiceClient {
     @GetMapping("designations/{id}")
-    public DesignationDTO getDesignationById(@PathVariable String id);
+    DesignationDTO getDesignationById(@PathVariable String id);
 }
 
