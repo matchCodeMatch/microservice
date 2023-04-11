@@ -1,19 +1,28 @@
-name: Docker Image CI
+name: Build and Deploy Microservice
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build --file ./Department/Dockerfile --tag my-image-name:$(date +%s) .
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build and Test
+      run: |
+        cd Department
+        ./gradlew build
+    
+
+    - name: Build Docker Image
+      uses: docker/build-push-action@v2
+      with:
+        context: ./Department
+        
+
 
