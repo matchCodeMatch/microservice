@@ -10,8 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    
     - name: Checkout code
       uses: actions/checkout@v2
+      
+    - name: Set executable permissions for gradlew
+      run: chmod +x gradlew
 
     - name: Build and Test
       run: |
